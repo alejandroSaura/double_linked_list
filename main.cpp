@@ -32,23 +32,48 @@ public:
 
   item *insert(int value) {
     item *new_item = new item(value);
-    new_item->prev = &head;
-    new_item->next = WHAT; // fill this in
-    head.prev = WHAT; // fill this in
-    head.next = new_item;
+    new_item->prev = head.prev;
+    new_item->next = &head; // fill this in
+	if (head.next == &head)
+	{
+		head.next = new_item;
+	}
+	//head.prev = ; // fill this in
+    //head.next = new_item;
+	head.prev->next = new_item;
+	head.prev = new_item;
+	
+
+	return new_item;
   }
 
   item *insert_after(item *prev, int value) {
     item *next = prev->next;
     item *new_item = new item(value);
-    new_item->prev = &head;
-    new_item->next = WHAT; // fill this in
-    prev->next = WHAT; // fill this in
-    next->prev = WHAT; // fill this in
+    new_item->prev = prev; //retouched &head
+    new_item->next = next; // fill this in
+    prev->next = new_item; // fill this in
+    //next->prev = WHAT; // fill this in
+
+	return new_item;
   }
 
   item *find(int value) {
      // write a loop here to return the first element with this value
+	  item *iter;
+	  iter = &head;
+
+	  bool reached = false;
+	  while (!reached)
+	  {
+		  iter = iter->next;
+		  if (iter->value == value)
+		  {
+			  reached = true;
+		  }		  
+	  }
+
+	  return iter;
   }
 
   item *get_first() {
@@ -57,11 +82,11 @@ public:
 
   void remove(item *victim) {
       item *prev = victim->prev;
-      item *next = victim->prev;
-      victim->prev = WHAT; // fill this in
-      victim->next = WHAT; // fill this in
-      prev->next = WHAT; // fill this in
-      next->prev = WHAT; // fill this in
+      item *next = victim->next;
+      victim->prev = nullptr; // fill this in
+      victim->next = nullptr; // fill this in
+      prev->next = next; // fill this in
+      next->prev = prev; // fill this in
   }
 
   void dump(std::ostream &os) {
